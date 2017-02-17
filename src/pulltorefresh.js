@@ -44,6 +44,11 @@ let _setup = false;
 let _enable = false;
 let _timeout;
 
+let supportsPassive = false;
+try {
+  window.addEventListener("test", null, { get passive() { supportsPassive = true }});
+} catch(e) {}
+
 function _update() {
   const {
     classPrefix,
@@ -201,7 +206,7 @@ function _setupEvents() {
 
   window.addEventListener('touchend', _onTouchEnd);
   window.addEventListener('touchstart', _onTouchStart);
-  window.addEventListener('touchmove', _onTouchMove, { passive: false });
+  window.addEventListener('touchmove', _onTouchMove, (supportsPassive ? { passive: false } : false));
 
   // Store event handlers to use for teardown later
   return {
